@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
     firstname: {
       type: String,
@@ -28,12 +28,31 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "user",
     },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
+    cart: {
+      type: Array,
+      default: [],
+    },
+    address: {
+      type: Schema.Types.ObjectId,
+      ref: "Address",
+    },
+    wishlist: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+    },
+    refreshToken: {
+      type: String,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const User = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
 
 export { User };
