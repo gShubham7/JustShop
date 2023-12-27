@@ -1,7 +1,10 @@
 import asyncHandler from "express-async-handler";
 import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
-import { generateRefreshToken, generateToken } from "../utils/generateToken.js";
+import {
+  generateLoginToken,
+  generateRefreshToken,
+} from "../utils/generateToken.js";
 import jwt from "jsonwebtoken";
 
 const registerUser = asyncHandler(async (req, res) => {
@@ -40,7 +43,13 @@ const loginUser = asyncHandler(async (req, res) => {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
     });
-    res.json({ firstname, lastname, email, mobile, token: generateToken(_id) });
+    res.json({
+      firstname,
+      lastname,
+      email,
+      mobile,
+      token: generateLoginToken(_id),
+    });
   } else {
     throw new Error("Invalid Credintials");
   }
@@ -54,7 +63,7 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
   if (!user) throw new Error("Refresh token not matched");
   jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
     if (err || user.id !== decoded.id) throw new Error("Something went wrong");
-    const accessToken = generateToken(user._id);
+    const accessToken = generateLoginToken(user._id);
     res.json({ accessToken });
   });
 });

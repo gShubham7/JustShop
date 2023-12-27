@@ -5,6 +5,7 @@ import { authRouter } from "./routes/auth.route.js";
 import { errorHandler, notFound } from "./middlewares/errorHandler.js";
 import { userRouter } from "./routes/user.route.js";
 import cookieParser from "cookie-parser";
+import { productRouter } from "./routes/product.route.js";
 
 config();
 const PORT = process.env.PORT || 8080;
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/product", productRouter);
 
 app.use(notFound);
 app.use(errorHandler);
