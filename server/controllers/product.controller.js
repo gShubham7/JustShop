@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import { Product } from "../models/product.model.js";
 import slugify from "slugify";
 import { User } from "../models/user.model.js";
+import { validateMongodbId } from "../utils/validateMongodbId.js";
 
 const createProduct = asyncHandler(async (req, res) => {
   try {
@@ -16,27 +17,27 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
-  const id = req.params;
-  validateMongoDbId(id);
+  const { id } = req.params;
+  validateMongodbId(id);
   try {
     if (req.body.title) {
       req.body.slug = slugify(req.body.title);
     }
-    const updateProduct = await Product.findOneAndUpdate({ id }, req.body, {
+    const updatedProduct = await Product.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    res.json(updateProduct);
+    res.json(updatedProduct);
   } catch (error) {
     throw new Error(error);
   }
 });
 
 const deleteProduct = asyncHandler(async (req, res) => {
-  const id = req.params;
-  validateMongoDbId(id);
+  const { id } = req.params;
+  validateMongodbId(id);
   try {
-    const deleteProduct = await Product.findOneAndDelete(id);
-    res.json(deleteProduct);
+    const deletedProduct = await Product.findByIdAndDelete(id);
+    res.json(deletedProduct);
   } catch (error) {
     throw new Error(error);
   }
@@ -44,7 +45,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const getSingleProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validateMongoDbId(id);
+  validateMongodbId(id);
   try {
     const findProduct = await Product.findById(id);
     res.json(findProduct);
@@ -72,15 +73,13 @@ const getAllProduct = asyncHandler(async (req, res) => {
       query = query.sort("-createdAt");
     }
 
-    // limiting the fields
+    // Limiting the fields
     if (req.query.fields) {
       const fields = req.query.fields.split(",").join(" ");
       query = query.select(fields);
-    } else {
-      query = query.select("-__v");
     }
 
-    // pagination
+    // Pagination
     const page = req.query.page;
     const limit = req.query.limit;
     const skip = (page - 1) * limit;
@@ -89,8 +88,8 @@ const getAllProduct = asyncHandler(async (req, res) => {
       const productCount = await Product.countDocuments();
       if (skip >= productCount) throw new Error("This Page does not exists");
     }
-    const product = await query;
-    res.json(product);
+    const finalProducts = await query;
+    res.json(finalProducts);
   } catch (error) {
     throw new Error(error);
   }

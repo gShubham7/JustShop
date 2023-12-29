@@ -43,7 +43,10 @@ const productSchema = new Schema(
         url: String,
       },
     ],
-    color: [],
+    color: {
+      type: String,
+      required: true,
+    },
     tags: String,
     ratings: [
       {
@@ -57,6 +60,7 @@ const productSchema = new Schema(
       default: 0,
     },
   },
+  { versionKey: false },
   { timestamps: true }
 );
 

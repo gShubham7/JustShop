@@ -14,10 +14,10 @@ const productRouter = Router();
 
 productRouter.post("/", authMiddleware, isAdmin, createProduct);
 productRouter.get("/:id", getSingleProduct);
-productRouter.put("/wishlist", authMiddleware, addToWishlist);
-productRouter.put("/rating", authMiddleware, rating);
 productRouter.put("/:id", authMiddleware, isAdmin, updateProduct);
 productRouter.delete("/:id", authMiddleware, isAdmin, deleteProduct);
+productRouter.put("/wishlist", authMiddleware, addToWishlist);
+productRouter.put("/rating", authMiddleware, rating);
 productRouter.get("/", getAllProduct);
 
 export { productRouter };

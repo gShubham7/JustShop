@@ -6,11 +6,13 @@ import { errorHandler, notFound } from "./middlewares/errorHandler.js";
 import { userRouter } from "./routes/user.route.js";
 import cookieParser from "cookie-parser";
 import { productRouter } from "./routes/product.route.js";
+import morgan from "morgan";
 
 config();
 const PORT = process.env.PORT || 8080;
 const app = express();
 
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRouter);
