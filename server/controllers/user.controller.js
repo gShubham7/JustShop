@@ -1,6 +1,10 @@
 import asyncHandler from "express-async-handler";
 import { User } from "../models/user.model.js";
 import { validateMongodbId } from "../utils/validateMongodbId.js";
+import bcrypt from "bcrypt";
+import { generatePasswordResetToken } from "../utils/generateToken.js";
+import { sendEmail } from "../utils/sendEmail.js";
+import { generateHashedPassword } from "../utils/generateHashedPassword.js";
 
 //Get All Users
 const getAllUsers = asyncHandler(async (req, res) => {
@@ -87,6 +91,71 @@ const unblockUser = asyncHandler(async (req, res) => {
   }
 });
 
+const updatePassword = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { password } = req.body;
+  validateMongodbId(_id);
+  const user = await User.findById(_id);
+
+  try {
+    if (user && !(await bcrypt.compare(password, user.password))) {
+      const hashedPassword = await generateHashedPassword(password);
+      user.password = hashedPassword;
+      const updatedPassword = await user.save();
+      res.json(updatedPassword);
+    } else {
+      res.json(user);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) throw new Error("User does not exists");
+  try {
+    const passwordResetToken = generatePasswordResetToken();
+    user.passwordResetToken = passwordResetToken;
+    user.passwordResetExpires = Date.now() + 30 * 60 * 1000;
+    await user.save();
+    const resetURL = `Hi, Please follow this link to rest your password <a href="http://localhost:${process.env.PORT}/api/user/reset-password/${passwordResetToken}">Click Here</a>`;
+    const data = {
+      to: email,
+      subject: "Forgot Password Link",
+      text: `Hey`,
+      html: resetURL,
+    };
+    sendEmail(data);
+    res.json(passwordResetToken);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  const user = await User.findOne({
+    passwordResetToken: token,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+  if (!user) throw new Error("Token Expired, Please try again later");
+  try {
+    const hashedPassword = await generateHashedPassword(password);
+    user.password = hashedPassword;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    user.passwordChangedAt = Date.now();
+    await user.save();
+    res.json(user);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 export {
   getAllUsers,
   getSingleUser,
@@ -94,4 +163,7 @@ export {
   updateUser,
   blockUser,
   unblockUser,
+  updatePassword,
+  forgotPassword,
+  resetPassword,
 };

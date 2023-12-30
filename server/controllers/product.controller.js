@@ -102,7 +102,7 @@ const addToWishlist = asyncHandler(async (req, res) => {
     const user = await User.findById(_id);
     const alreadyAdded = user.wishlist.find((id) => id.toString() === prodId);
     if (alreadyAdded) {
-      let user = await User.findByIdAndUpdate(
+      const user = await User.findByIdAndUpdate(
         _id,
         {
           $pull: { wishlist: prodId },
@@ -113,7 +113,7 @@ const addToWishlist = asyncHandler(async (req, res) => {
       );
       res.json(user);
     } else {
-      let user = await User.findByIdAndUpdate(
+      const user = await User.findByIdAndUpdate(
         _id,
         {
           $push: { wishlist: prodId },
@@ -134,11 +134,11 @@ const rating = asyncHandler(async (req, res) => {
   const { star, prodId, comment } = req.body;
   try {
     const product = await Product.findById(prodId);
-    let alreadyRated = product.ratings.find(
+    const alreadyRated = product.ratings.find(
       (userId) => userId.postedBy.toString() === _id.toString()
     );
     if (alreadyRated) {
-      const updateRating = await Product.updateOne(
+      await Product.updateOne(
         {
           ratings: { $elemMatch: alreadyRated },
         },
@@ -150,7 +150,7 @@ const rating = asyncHandler(async (req, res) => {
         }
       );
     } else {
-      const rateProduct = await Product.findByIdAndUpdate(
+      await Product.findByIdAndUpdate(
         prodId,
         {
           $push: {
@@ -167,12 +167,12 @@ const rating = asyncHandler(async (req, res) => {
       );
     }
     const getAllRatings = await Product.findById(prodId);
-    let totalRating = getAllRatings.ratings.length;
-    let ratingSum = getAllRatings.ratings
+    const totalRating = getAllRatings.ratings.length;
+    const ratingSum = getAllRatings.ratings
       .map((item) => item.star)
       .reduce((prev, curr) => prev + curr, 0);
-    let actualRating = Math.round(ratingSum / totalRating);
-    let finalProduct = await Product.findByIdAndUpdate(
+    const actualRating = Math.round(ratingSum / totalRating);
+    const finalProduct = await Product.findByIdAndUpdate(
       prodId,
       {
         totalRating: actualRating,

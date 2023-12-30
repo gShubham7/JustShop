@@ -47,6 +47,15 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
+    passwordChangedAt: {
+      type: Date,
+    },
+    passwordResetToken: {
+      type: String,
+    },
+    passwordResetExpires: {
+      type: String,
+    },
   },
   { versionKey: false },
   { timestamps: true }

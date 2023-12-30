@@ -2,7 +2,7 @@ import { config } from "dotenv";
 import express from "express";
 import { dbConnect } from "./config/dbConnect.js";
 import { authRouter } from "./routes/auth.route.js";
-import { errorHandler, notFound } from "./middlewares/errorHandler.js";
+import { errorHandler, notFound } from "./middlewares/errorHandler.middleware.js";
 import { userRouter } from "./routes/user.route.js";
 import cookieParser from "cookie-parser";
 import { productRouter } from "./routes/product.route.js";

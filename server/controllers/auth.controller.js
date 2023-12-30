@@ -6,19 +6,19 @@ import {
   generateRefreshToken,
 } from "../utils/generateToken.js";
 import jwt from "jsonwebtoken";
+import { generateHashedPassword } from "../utils/generateHashedPassword.js";
 
 const registerUser = asyncHandler(async (req, res) => {
   const { firstname, lastname, email, mobile, password } = req.body;
   const findUser = await User.findOne({ email });
   if (!findUser) {
-    const salt = await bcrypt.genSaltSync(10);
-    const hshedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await generateHashedPassword(password);
     const newUser = await User.create({
       firstname,
       lastname,
       email,
       mobile,
-      password: hshedPassword,
+      password: hashedPassword,
     });
     res.status(201).json(newUser);
   } else {
@@ -32,7 +32,7 @@ const loginUser = asyncHandler(async (req, res) => {
   if (findUser && (await bcrypt.compare(password, findUser.password))) {
     const { _id, firstname, lastname, email, mobile } = findUser;
     const refreshToken = generateRefreshToken(_id);
-    const updateUser = await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
       _id,
       {
         refreshToken,

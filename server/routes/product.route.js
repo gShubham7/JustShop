@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authMiddleware, isAdmin } from "../middlewares/authMiddleware.js";
+import { authMiddleware, isAdmin } from "../middlewares/auth.middleware.js";
 import {
   addToWishlist,
   createProduct,
