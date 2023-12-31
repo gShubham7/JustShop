@@ -12,9 +12,8 @@ export const sendEmail = asyncHandler(async (data) => {
     },
   });
 
-  // send mail with defined transport object
   const info = await transporter.sendMail({
-    from: '"Hey 👻" <abc@gmail.email>',
+    from: "Hey 👻",
     to: data.to,
     subject: data.subject,
     text: data.text,

@@ -60,10 +60,12 @@ const productSchema = new Schema(
       default: 0,
     },
   },
-  { versionKey: false },
-  { timestamps: true }
+  {
+    versionKey: false,
+  },
+  {
+    timestamps: true,
+  }
 );
 
-const Product = model("Product", productSchema);
-
-export { Product };
+export const Product = model("Product", productSchema);

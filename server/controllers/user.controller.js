@@ -96,7 +96,6 @@ const updatePassword = asyncHandler(async (req, res) => {
   const { password } = req.body;
   validateMongodbId(_id);
   const user = await User.findById(_id);
-
   try {
     if (user && !(await bcrypt.compare(password, user.password))) {
       const hashedPassword = await generateHashedPassword(password);
@@ -120,11 +119,11 @@ const forgotPassword = asyncHandler(async (req, res) => {
     user.passwordResetToken = passwordResetToken;
     user.passwordResetExpires = Date.now() + 30 * 60 * 1000;
     await user.save();
-    const resetURL = `Hi, Please follow this link to rest your password <a href="http://localhost:${process.env.PORT}/api/user/reset-password/${passwordResetToken}">Click Here</a>`;
+    const resetURL = `Please follow this link to rest your password <a href="http://localhost:${process.env.PORT}/api/user/reset-password/${passwordResetToken}">Click Here</a>`;
     const data = {
       to: email,
       subject: "Forgot Password Link",
-      text: `Hey`,
+      text: `Hey ${user.firstname}`,
       html: resetURL,
     };
     sendEmail(data);
@@ -137,7 +136,6 @@ const forgotPassword = asyncHandler(async (req, res) => {
 const resetPassword = asyncHandler(async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
-
   const user = await User.findOne({
     passwordResetToken: token,
     passwordResetExpires: { $gt: Date.now() },
