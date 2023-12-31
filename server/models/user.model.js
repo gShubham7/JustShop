@@ -40,10 +40,12 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Address",
     },
-    wishlist: {
-      type: Schema.Types.ObjectId,
-      ref: "Product",
-    },
+    wishlist: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
     refreshToken: {
       type: String,
     },
@@ -58,10 +60,8 @@ const userSchema = new Schema(
     },
   },
   {
-    versionKey: false,
-  },
-  {
     timestamps: true,
+    versionKey: false,
   }
 );
 
