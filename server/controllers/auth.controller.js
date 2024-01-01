@@ -51,14 +51,14 @@ const loginUser = asyncHandler(async (req, res) => {
       token: generateLoginToken(_id),
     });
   } else {
-    throw new Error("Invalid Credintials");
+    throw new Error("Invalid Credentials");
   }
 });
 
 const handleRefreshToken = asyncHandler(async (req, res) => {
   const cookie = req.cookies;
   if (!cookie?.refreshToken) throw new Error("No refresh token Cookies");
-  const refreshToken = cookie.refreshToken;
+  const { refreshToken } = cookie;
   const user = await User.findOne({ refreshToken });
   if (!user) throw new Error("Refresh token not matched");
   jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
@@ -71,7 +71,7 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
 const logoutUser = asyncHandler(async (req, res) => {
   const cookie = req.cookies;
   if (!cookie?.refreshToken) throw new Error("No refresh token Cookies");
-  const refreshToken = cookie.refreshToken;
+  const { refreshToken } = cookie;
   const user = await User.findOne({ refreshToken });
   if (!user) {
     res.clearCookie("refreshToken", { httpOnly: true, secure: true });

@@ -80,8 +80,8 @@ const getAllProduct = asyncHandler(async (req, res) => {
     }
 
     // Pagination
-    const page = req.query.page;
-    const limit = req.query.limit;
+    const { page } = req.query;
+    const { limit } = req.query;
     const skip = (page - 1) * limit;
     query = query.skip(skip).limit(limit);
     if (req.query.page) {
@@ -166,9 +166,9 @@ const rating = asyncHandler(async (req, res) => {
         }
       );
     }
-    const getAllRatings = await Product.findById(prodId);
-    const totalRating = getAllRatings.ratings.length;
-    const ratingSum = getAllRatings.ratings
+    const ratedProduct = await Product.findById(prodId);
+    const totalRating = ratedProduct.ratings.length;
+    const ratingSum = ratedProduct.ratings
       .map((item) => item.star)
       .reduce((prev, curr) => prev + curr, 0);
     const actualRating = Math.round(ratingSum / totalRating);
