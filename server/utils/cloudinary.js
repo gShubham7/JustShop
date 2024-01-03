@@ -8,7 +8,7 @@ cloudinary.config({
 
 const uploadImage = async (filesToUpload) => {
   return new Promise((resolve) => {
-    cloudinary.UploadStream.upload(filesToUpload, (result) => {
+    cloudinary.uploader.upload(filesToUpload, (result) => {
       resolve(
         {
           url: result.secure_url,
