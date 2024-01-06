@@ -1,8 +1,9 @@
 import asyncHandler from "express-async-handler";
 import { Product } from "../models/product.model.js";
 import slugify from "slugify";
-import { User } from "../models/user.model.js";
 import { validateMongodbId } from "../utils/validateMongodbId.js";
+import { cloudinaryUploadImage } from "../utils/cloudinary.js";
+import fs from "fs";
 
 const createProduct = asyncHandler(async (req, res) => {
   try {
@@ -95,40 +96,6 @@ const getAllProduct = asyncHandler(async (req, res) => {
   }
 });
 
-const addToWishlist = asyncHandler(async (req, res) => {
-  const { _id } = req.user;
-  const { prodId } = req.body;
-  try {
-    const user = await User.findById(_id);
-    const alreadyAdded = user.wishlist.find((id) => id.toString() === prodId);
-    if (alreadyAdded) {
-      const user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $pull: { wishlist: prodId },
-        },
-        {
-          new: true,
-        }
-      );
-      res.json(user);
-    } else {
-      const user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $push: { wishlist: prodId },
-        },
-        {
-          new: true,
-        }
-      );
-      res.json(user);
-    }
-  } catch (error) {
-    throw new Error(error);
-  }
-});
-
 const rating = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { star, prodId, comment } = req.body;
@@ -185,12 +152,36 @@ const rating = asyncHandler(async (req, res) => {
   }
 });
 
+const uploadImages = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  validateMongodbId(id);
+  try {
+    const uploader = (path) => cloudinaryUploadImage(path, "images");
+    const urls = [];
+    const files = req.files;
+
+    for (const file of files) {
+      const { path } = file;
+      const newpath = await uploader(path);
+      urls.push(newpath);
+      fs.unlinkSync(path);
+    }
+    const images = urls.map((file) => {
+      return file;
+    });
+    await Product.findByIdAndUpdate(id, { images }, { new: true });
+    res.json(images);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 export {
   createProduct,
   getSingleProduct,
   getAllProduct,
   updateProduct,
   deleteProduct,
-  addToWishlist,
   rating,
+  uploadImages,
 };

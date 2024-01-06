@@ -154,6 +154,69 @@ const resetPassword = asyncHandler(async (req, res) => {
   }
 });
 
+const addToWishlist = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { prodId } = req.body;
+  try {
+    const user = await User.findById(_id);
+    const alreadyAdded = user.wishlist.find((id) => id.toString() === prodId);
+    if (alreadyAdded) {
+      const user = await User.findByIdAndUpdate(
+        _id,
+        {
+          $pull: { wishlist: prodId },
+        },
+        {
+          new: true,
+        }
+      );
+      res.json(user);
+    } else {
+      const user = await User.findByIdAndUpdate(
+        _id,
+        {
+          $push: { wishlist: prodId },
+        },
+        {
+          new: true,
+        }
+      );
+      res.json(user);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const getWishlist = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  validateMongodbId(_id);
+  try {
+    const findUser = await User.findById(_id).populate("wishlist");
+    res.json(findUser);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const saveAddress = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  console.log(_id);
+  validateMongodbId(_id);
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      _id,
+      {
+        address: req?.body?.address,
+      },
+      { new: true }
+    );
+    res.json(updatedUser);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 export {
   getAllUsers,
   getSingleUser,
@@ -164,4 +227,7 @@ export {
   updatePassword,
   forgotPassword,
   resetPassword,
+  addToWishlist,
+  getWishlist,
+  saveAddress,
 };

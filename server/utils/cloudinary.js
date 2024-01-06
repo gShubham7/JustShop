@@ -1,4 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
+import { config } from "dotenv";
+config();
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -6,12 +8,35 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-const uploadImage = async (filesToUpload) => {
+const cloudinaryUploadImage = async (filesToUpload) => {
   return new Promise((resolve) => {
-    cloudinary.uploader.upload(filesToUpload, (result) => {
+    cloudinary.uploader.upload(filesToUpload, (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        resolve(
+          {
+            url: result.secure_url,
+            asset_id: result.asset_id,
+            public_id: result.public_id,
+          },
+          {
+            resource_type: "auto",
+          }
+        );
+      }
+    });
+  });
+};
+
+const cloudinaryRemoveImage = async (filesToRemove) => {
+  return new Promise((resolve) => {
+    cloudinary.uploader.destroy(filesToRemove, (result) => {
       resolve(
         {
           url: result.secure_url,
+          asset_id: result.asset_id,
+          public_id: result.public_id,
         },
         {
           resource_type: "auto",
@@ -21,4 +46,4 @@ const uploadImage = async (filesToUpload) => {
   });
 };
 
-export { uploadImage };
+export { cloudinaryUploadImage, cloudinaryRemoveImage };
