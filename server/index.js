@@ -13,6 +13,7 @@ import morgan from "morgan";
 import { brandRouter } from "./routes/brand.route.js";
 import { productCategoryRouter } from "./routes/productCategory.route.js";
 import { cartRouter } from "./routes/cart.router.js";
+import { orderRouter } from "./routes/order.route.js";
 
 config();
 const PORT = process.env.PORT || 8080;
@@ -27,6 +28,7 @@ app.use("/api/product", productRouter);
 app.use("/api/product-category", productCategoryRouter);
 app.use("/api/brand", brandRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/order", orderRouter);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -54,4 +54,32 @@ const createCart = asyncHandler(async (req, res) => {
   }
 });
 
-export { createCart, getCart };
+const removeItemFromCart = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  validateMongodbId(id);
+  const { _id } = req.user;
+  try {
+    const cart = await Cart.findOne({ orderBy: _id });
+    cart.items = cart.items.filter((item) => item.product.toString() !== id);
+    await cart.save();
+    res.json(cart);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const emptyCart = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  validateMongodbId(_id);
+  try {
+    await Cart.findOneAndDelete({ orderBy: _id });
+    res.json({
+      message: "All items are removed from the cart.",
+      success: true,
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+export { createCart, getCart, removeItemFromCart, emptyCart };
