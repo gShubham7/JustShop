@@ -1,0 +1,656 @@
+openapi: 3.0.0
+info:
+  title: JustShop
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+tags:
+  - name: Auth
+  - name: User
+  - name: Product
+  - name: Product Category
+  - name: Brand
+  - name: Cart
+  - name: Order
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register A User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                firstname: Teju
+                lastname: Gaikwad
+                email: teju@gmail.com
+                mobile: "9665442078"
+                password: pass123
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login A User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: admin@gmail.com
+                password: pass123
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/auth/refresh:
+    get:
+      tags:
+        - Auth
+      summary: Refresh Token
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/auth/logout:
+    get:
+      tags:
+        - Auth
+      summary: Logout User
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/all-users:
+    get:
+      tags:
+        - User
+      summary: Get All Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/65894815957dff77d9996cea:
+    get:
+      tags:
+        - User
+      summary: Get A User
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - User
+      summary: Update A User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                firstname: Teju
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/658db00e2ae3cafff4adb747:
+    delete:
+      tags:
+        - User
+      summary: Delete A User
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/block-user/658dafe42ae3cafff4adb744:
+    put:
+      tags:
+        - User
+      summary: Block A User
+      requestBody:
+        content: {}
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/unblock-user/658dafe42ae3cafff4adb744:
+    put:
+      tags:
+        - User
+      summary: Unblock A User
+      requestBody:
+        content: {}
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/password:
+    put:
+      tags:
+        - User
+      summary: Update Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                password: "123456"
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/forgot-password:
+    post:
+      tags:
+        - User
+      summary: Forgot Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: teju6jadhav@gmail.com
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/reset-password/5c36b4c85e48e7e55ed28edfa74927fa61b67ea7c26e04827363af3966abc4f7:
+    put:
+      tags:
+        - User
+      summary: Reset Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                password: qwerty
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/wishlist:
+    put:
+      tags:
+        - User
+      summary: Add To Wishlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                prodId: 659156bc93901480385dc3ab
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - User
+      summary: Get Wishlist
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/product/upload/6591569b93901480385dc3a8:
+    put:
+      tags:
+        - User
+      summary: Upload Images
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: string
+                  format: binary
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/save-address:
+    put:
+      tags:
+        - User
+      summary: Save A Address
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                address: Mumbai
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/product:
+    post:
+      tags:
+        - Product
+      summary: Create A Product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Apple Watch
+                description: This is apple product
+                price: 10000
+                category: Watch
+                brand: Apple
+                quantity: 10
+                color: black
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Product
+      summary: Get All Products
+      parameters:
+        - name: brand
+          in: query
+          schema:
+            type: string
+          example: Apple
+        - name: price
+          in: query
+          schema:
+            type: integer
+          example: "1500"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/product/658e83e17e6e451cf22998af:
+    get:
+      tags:
+        - Product
+      summary: Get A Product
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/product/658e9ac777b4c198bda33fab:
+    put:
+      tags:
+        - Product
+      summary: Update A Product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Samsung TV
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Product
+      summary: Delete A Product
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/product/rating:
+    put:
+      tags:
+        - Product
+      summary: Rating
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                star: 5
+                comment: This is good product
+                prodId: 659156bc93901480385dc3ab
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/product-category:
+    post:
+      tags:
+        - Product Category
+      summary: Create Category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Laptop
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Product Category
+      summary: Get All Category
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/product-category/6591125a53f244946b4002bd:
+    put:
+      tags:
+        - Product Category
+      summary: Update Category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: New TV
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Product Category
+      summary: Delete Category
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/product-category/6591126453f244946b4002c0:
+    get:
+      tags:
+        - Product Category
+      summary: Get A Category
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/brand:
+    post:
+      tags:
+        - Brand
+      summary: Create Brand
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Lenovo
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Brand
+      summary: Get All Brand
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/brand/65911886933b929186128602:
+    put:
+      tags:
+        - Brand
+      summary: Update Brand
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Lenovo
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Brand
+      summary: Delete Brand
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/brand/6591187a933b9291861285ff:
+    get:
+      tags:
+        - Brand
+      summary: Get A Brand
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/cart:
+    post:
+      tags:
+        - Cart
+      summary: Create A Cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                productId: 659156bc93901480385dc3ab
+                quantity: 5
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Cart
+      summary: Get Cart
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Cart
+      summary: Empty The Cart
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/cart/659156bc93901480385dc3ab:
+    delete:
+      tags:
+        - Cart
+      summary: Remove Item From Cart
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/order:
+    post:
+      tags:
+        - Order
+      summary: Create Order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                COD: true
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/order/get-orders:
+    get:
+      tags:
+        - Order
+      summary: Get A Order
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/order/get-all-orders:
+    get:
+      tags:
+        - Order
+      summary: Get All Orders
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/order/update-order/659c235f3e18c4b856081cbd:
+    put:
+      tags:
+        - Order
+      summary: Update An Order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                status: Processing
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}

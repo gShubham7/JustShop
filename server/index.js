@@ -15,8 +15,11 @@ import { brandRouter } from "./routes/brand.route.js";
 import { productCategoryRouter } from "./routes/productCategory.route.js";
 import { cartRouter } from "./routes/cart.router.js";
 import { orderRouter } from "./routes/order.route.js";
+import swaggerUI from "swagger-ui-express";
+import YAML from "yamljs";
 
 config();
+const apiDocs = YAML.load("./api.yaml");
 const PORT = process.env.PORT || 3000;
 const app = express();
 
@@ -25,6 +28,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
+
+app.use(
+  "/api-docs",
+  swaggerUI.serve,
+  swaggerUI.setup(apiDocs, {
+    explorer: true,
+    customSiteTitle: "JustShop",
+  })
+);
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
