@@ -6,7 +6,6 @@ import { generatePasswordResetToken } from "../utils/generateToken.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateHashedPassword } from "../utils/generateHashedPassword.js";
 
-//Get All Users
 const getAllUsers = asyncHandler(async (req, res) => {
   try {
     const getUsers = await User.find();
@@ -16,7 +15,6 @@ const getAllUsers = asyncHandler(async (req, res) => {
   }
 });
 
-//Get Single User
 const getSingleUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongodbId(id);
@@ -28,7 +26,6 @@ const getSingleUser = asyncHandler(async (req, res) => {
   }
 });
 
-//Delete A User
 const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongodbId(id);
@@ -40,7 +37,6 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
-//Update A User
 const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
@@ -101,9 +97,9 @@ const updatePassword = asyncHandler(async (req, res) => {
       const hashedPassword = await generateHashedPassword(password);
       user.password = hashedPassword;
       const updatedPassword = await user.save();
-      res.json(updatedPassword);
+      res.status(200).json(updatedPassword);
     } else {
-      res.json(user);
+      res.status(400).json({ message: "Bad Request" });
     }
   } catch (error) {
     throw new Error(error);
@@ -113,7 +109,7 @@ const updatePassword = asyncHandler(async (req, res) => {
 const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
-  if (!user) throw new Error("User does not exists");
+  if (!user) return res.status(400).json({ message: "Bad Request" });
   try {
     const passwordResetToken = generatePasswordResetToken();
     user.passwordResetToken = passwordResetToken;
@@ -127,7 +123,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
       html: resetURL,
     };
     sendEmail(data);
-    res.json(passwordResetToken);
+    res.status(200).json(passwordResetToken);
   } catch (error) {
     throw new Error(error);
   }
@@ -140,7 +136,7 @@ const resetPassword = asyncHandler(async (req, res) => {
     passwordResetToken: token,
     passwordResetExpires: { $gt: Date.now() },
   });
-  if (!user) throw new Error("Token Expired, Please try again later");
+  if (!user) return res.status(400).json({ message: "Bad Request" });
   try {
     const hashedPassword = await generateHashedPassword(password);
     user.password = hashedPassword;
@@ -148,7 +144,7 @@ const resetPassword = asyncHandler(async (req, res) => {
     user.passwordResetExpires = undefined;
     user.passwordChangedAt = Date.now();
     await user.save();
-    res.json(user);
+    res.status(200).json(user);
   } catch (error) {
     throw new Error(error);
   }
@@ -181,7 +177,7 @@ const addToWishlist = asyncHandler(async (req, res) => {
           new: true,
         }
       );
-      res.json(user);
+      res.status(200).json(user);
     }
   } catch (error) {
     throw new Error(error);
@@ -193,7 +189,7 @@ const getWishlist = asyncHandler(async (req, res) => {
   validateMongodbId(_id);
   try {
     const findUser = await User.findById(_id).populate("wishlist");
-    res.json(findUser);
+    res.status(200).json(findUser);
   } catch (error) {
     throw new Error(error);
   }
@@ -211,7 +207,7 @@ const saveAddress = asyncHandler(async (req, res) => {
       },
       { new: true }
     );
-    res.json(updatedUser);
+    res.status(200).json(updatedUser);
   } catch (error) {
     throw new Error(error);
   }

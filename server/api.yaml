@@ -1,9 +1,35 @@
 openapi: 3.0.0
 info:
-  title: JustShop
+  title: JustShop API
+  description: |
+    JustShop is a robust E-commerce platform specializing in electronic products. This API documentation outlines the functionalities available for both users and administrators on the platform. From user registration to product management, order processing, and more, JustShop's API enables seamless interaction with its features.
+
+    **User Features:**
+    - User Registration and Authentication: Allows users to register an account and log in securely.
+    - User Profile Management: Retrieve and update user profiles. Users can also update their passwords and recover forgotten passwords.
+    - Wishlist Management: Add products to a wishlist and view the wishlist.
+    - Cart Operations: Add, view, and remove items from the shopping cart.
+    - Address Management: Save and update user addresses.
+
+    **Product Features:**
+    - Product Management: Create, retrieve, update, and delete electronic products. Users can also rate and comment on products.
+    - Product Category Management: Create, retrieve, update, and delete product categories.
+
+    **Brand Management:**
+    - Brand Management: Create, retrieve, update, and delete product brands.
+
+    **Order Operations:**
+    - Order Creation: Place new orders, including options for Cash on Delivery (COD).
+    - Order Retrieval: Retrieve individual orders and view all orders.
+    - Order Updates: Update the status of an order, such as marking it as processing.
+
+    **Authentication and Security:**
+    - Token-based Authentication: Secure endpoints using bearer tokens for enhanced security.
+
+    The API provides a comprehensive set of endpoints for building a fully functional electronic commerce application. Please refer to the individual endpoints for detailed request and response information.
   version: 1.0.0
 servers:
-  - url: http://localhost:3000
+  - url: http://localhost:3000/api
 components:
   securitySchemes:
     bearerAuth:
@@ -18,7 +44,7 @@ tags:
   - name: Cart
   - name: Order
 paths:
-  /api/auth/register:
+  /auth/register:
     post:
       tags:
         - Auth
@@ -35,11 +61,15 @@ paths:
                 mobile: "9665442078"
                 password: pass123
       responses:
-        "200":
-          description: Successful response
+        "201":
+          description: Created
           content:
             application/json: {}
-  /api/auth/login:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /auth/login:
     post:
       tags:
         - Auth
@@ -54,20 +84,28 @@ paths:
                 password: pass123
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/auth/refresh:
+        "400":
+          description: Bad Request
+          content:
+            application/json: {}
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /auth/refresh:
     get:
       tags:
         - Auth
       summary: Refresh Token
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/auth/logout:
+  /auth/logout:
     get:
       tags:
         - Auth
@@ -75,11 +113,11 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        "200":
-          description: Successful response
+        "204":
+          description: No Content
           content:
             application/json: {}
-  /api/user/all-users:
+  /user/all-users:
     get:
       tags:
         - User
@@ -88,25 +126,47 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/user/65894815957dff77d9996cea:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /user/{userId}:
     get:
       tags:
         - User
       summary: Get A User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
+          content:
+            application/json: {}
+        "500":
+          description: Internal Server Error
           content:
             application/json: {}
     put:
       tags:
         - User
       summary: Update A User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID
       requestBody:
         content:
           application/json:
@@ -118,50 +178,86 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/user/658db00e2ae3cafff4adb747:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
     delete:
       tags:
         - User
       summary: Delete A User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/user/block-user/658dafe42ae3cafff4adb744:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /user/block-user/{userId}:
     put:
       tags:
         - User
       summary: Block A User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID
       requestBody:
         content: {}
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/user/unblock-user/658dafe42ae3cafff4adb744:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /user/unblock-user/{userId}:
     put:
       tags:
         - User
       summary: Unblock A User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID
       requestBody:
         content: {}
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/user/password:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /user/password:
     put:
       tags:
         - User
@@ -177,10 +273,14 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/user/forgot-password:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /user/forgot-password:
     post:
       tags:
         - User
@@ -196,14 +296,25 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/user/reset-password/5c36b4c85e48e7e55ed28edfa74927fa61b67ea7c26e04827363af3966abc4f7:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /user/reset-password/{token}:
     put:
       tags:
         - User
       summary: Reset Password
+      parameters:
+        - in: path
+          name: token
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID
       requestBody:
         content:
           application/json:
@@ -215,10 +326,29 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/user/wishlist:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /user/wishlist:
+    get:
+      tags:
+        - User
+      summary: Get Wishlist
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
     put:
       tags:
         - User
@@ -234,42 +364,14 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-    get:
-      tags:
-        - User
-      summary: Get Wishlist
-      security:
-        - bearerAuth: []
-      responses:
-        "200":
-          description: Successful response
+        "500":
+          description: Internal Server Error
           content:
             application/json: {}
-  /api/product/upload/6591569b93901480385dc3a8:
-    put:
-      tags:
-        - User
-      summary: Upload Images
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                images:
-                  type: string
-                  format: binary
-      security:
-        - bearerAuth: []
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /api/user/save-address:
+  /user/save-address:
     put:
       tags:
         - User
@@ -285,10 +387,14 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/product:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /product:
     post:
       tags:
         - Product
@@ -310,7 +416,11 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
+          content:
+            application/json: {}
+        "500":
+          description: Internal Server Error
           content:
             application/json: {}
     get:
@@ -330,24 +440,45 @@ paths:
           example: "1500"
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/product/658e83e17e6e451cf22998af:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /product/{productId}:
     get:
       tags:
         - Product
       summary: Get A Product
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Product ID
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/product/658e9ac777b4c198bda33fab:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
     put:
       tags:
         - Product
       summary: Update A Product
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Product ID
       requestBody:
         content:
           application/json:
@@ -359,21 +490,36 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
+          content:
+            application/json: {}
+        "500":
+          description: Internal Server Error
           content:
             application/json: {}
     delete:
       tags:
         - Product
       summary: Delete A Product
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Product ID
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/product/rating:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /product/rating:
     put:
       tags:
         - Product
@@ -391,10 +537,61 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/product-category:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /product/upload/{productId}:
+    put:
+      tags:
+        - User
+      summary: Upload Images
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Product ID
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: string
+                  format: binary
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /product-category:
+    get:
+      tags:
+        - Product Category
+      summary: Get All Category
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
     post:
       tags:
         - Product Category
@@ -410,25 +607,47 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /product-category/{productCategoryId}:
     get:
       tags:
         - Product Category
-      summary: Get All Category
+      summary: Get A Category
+      parameters:
+        - in: path
+          name: productCategoryId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Product Category ID
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/product-category/6591125a53f244946b4002bd:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
     put:
       tags:
         - Product Category
       summary: Update Category
+      parameters:
+        - in: path
+          name: productCategoryId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Product Category ID
       requestBody:
         content:
           application/json:
@@ -440,33 +659,51 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
+          content:
+            application/json: {}
+        "500":
+          description: Internal Server Error
           content:
             application/json: {}
     delete:
       tags:
         - Product Category
       summary: Delete Category
+      parameters:
+        - in: path
+          name: productCategoryId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Product Category ID
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/product-category/6591126453f244946b4002c0:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /brand:
     get:
       tags:
-        - Product Category
-      summary: Get A Category
+        - Brand
+      summary: Get All Brand
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/brand:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
     post:
       tags:
         - Brand
@@ -482,25 +719,54 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /brand/{brandId}:
     get:
       tags:
         - Brand
-      summary: Get All Brand
+      summary: Get A Brand
+      parameters:
+        - in: path
+          name: brandId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Brand ID
+      parameters:
+        - in: path
+          name: brandId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Brand ID
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/brand/65911886933b929186128602:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
     put:
       tags:
         - Brand
       summary: Update Brand
+      parameters:
+        - in: path
+          name: productCategoryId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Product Category ID
       requestBody:
         content:
           application/json:
@@ -512,33 +778,51 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
+          content:
+            application/json: {}
+        "500":
+          description: Internal Server Error
           content:
             application/json: {}
     delete:
       tags:
         - Brand
       summary: Delete Brand
+      parameters:
+        - in: path
+          name: productCategoryId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Product Category ID
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/brand/6591187a933b9291861285ff:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /cart:
     get:
       tags:
-        - Brand
-      summary: Get A Brand
+        - Cart
+      summary: Get Cart
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/cart:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
     post:
       tags:
         - Cart
@@ -555,18 +839,7 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
-          content:
-            application/json: {}
-    get:
-      tags:
-        - Cart
-      summary: Get Cart
-      security:
-        - bearerAuth: []
-      responses:
-        "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
     delete:
@@ -577,22 +850,37 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/cart/659156bc93901480385dc3ab:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /cart/{productId}:
     delete:
       tags:
         - Cart
       summary: Remove Item From Cart
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Product ID
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/order:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /order:
     post:
       tags:
         - Order
@@ -608,10 +896,14 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/order/get-orders:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /order/get-orders:
     get:
       tags:
         - Order
@@ -620,10 +912,14 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/order/get-all-orders:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /order/get-all-orders:
     get:
       tags:
         - Order
@@ -632,14 +928,25 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json: {}
-  /api/order/update-order/659c235f3e18c4b856081cbd:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: {}
+  /order/update-order/{orderId}:
     put:
       tags:
         - Order
       summary: Update An Order
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          type: integer
+          minimum: 1
+          description: The Order ID
       requestBody:
         content:
           application/json:
@@ -651,6 +958,10 @@ paths:
         - bearerAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
+          content:
+            application/json: {}
+        "500":
+          description: Internal Server Error
           content:
             application/json: {}

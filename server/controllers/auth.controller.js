@@ -29,6 +29,9 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const findUser = await User.findOne({ email });
+  if (!findUser) {
+    return res.status(400).json({ message: "Invalid Credentials" });
+  }
   if (findUser && (await bcrypt.compare(password, findUser.password))) {
     const { _id, firstname, lastname, email, mobile } = findUser;
     const refreshToken = generateRefreshToken(_id);
@@ -43,7 +46,7 @@ const loginUser = asyncHandler(async (req, res) => {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
     });
-    res.json({
+    res.status(200).json({
       firstname,
       lastname,
       email,
@@ -64,7 +67,7 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
   jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
     if (err || user.id !== decoded.id) throw new Error("Something went wrong");
     const accessToken = generateLoginToken(user._id);
-    res.json({ accessToken });
+    res.status(200).json({ accessToken });
   });
 });
 

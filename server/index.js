@@ -33,9 +33,8 @@ app.use(
   "/api-docs",
   swaggerUI.serve,
   swaggerUI.setup(apiDocs, {
-    explorer: true,
     customSiteTitle: "JustShop",
-  })
+  }),
 );
 
 app.use("/api/auth", authRouter);
