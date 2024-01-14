@@ -1,7 +1,11 @@
-import React from "react";
+import { Grid, Typography } from "@mui/material";
 
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  return (
+    <Grid>
+      <Typography variant="h5">Dashboard</Typography>
+    </Grid>
+  );
 };
 
 export default Dashboard;
