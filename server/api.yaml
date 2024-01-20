@@ -29,7 +29,7 @@ info:
     The API provides a comprehensive set of endpoints for building a fully functional electronic commerce application. Please refer to the individual endpoints for detailed request and response information.
   version: 1.0.0
 servers:
-  - url: http://localhost:3000/api
+  - url: http://localhost:8080/api
 components:
   securitySchemes:
     bearerAuth:

@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -54,6 +54,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
   backgroundColor: theme.palette.grey[800],
+  color: theme.palette.common.white,
 });
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -163,7 +164,7 @@ const ActiveMenu: ActiveMenuProps = {
   [MenuEnum.Orders]: false,
 };
 
-const Layout = () => {
+const Layout: FC = () => {
   const theme = useTheme();
   const [open, setOpen] = useState<boolean>(false);
   const [openList, setOpenList] = useState<ActiveMenuProps>(ActiveMenu);
@@ -185,7 +186,7 @@ const Layout = () => {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar sx={{ backgroundColor: theme.palette.warning.light }}>
+        <Toolbar sx={{ backgroundColor: theme.palette.grey[100] }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -206,7 +207,7 @@ const Layout = () => {
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <Typography variant="h6" width="100%" textAlign="left" px={2}>
-            {open ? "Menu" : "S.G."}
+            {open ? "Shubham G." : "S.G."}
           </Typography>
           <IconButton onClick={handleDrawerClose}>
             {open && (

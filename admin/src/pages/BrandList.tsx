@@ -1,5 +1,3 @@
-import React from "react";
-
 const BrandList = () => {
   return <div>BrandList</div>;
 };
