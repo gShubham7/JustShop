@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 const Login: FC = () => {
-  return <div>:FC</div>;
+  return <div>Login Page</div>;
 };
 
 export default Login;
