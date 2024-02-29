@@ -164,7 +164,7 @@ const ActiveMenu: ActiveMenuProps = {
   [MenuEnum.Orders]: false,
 };
 
-const Layout: FC = () => {
+const AdminLayout: FC = () => {
   const theme = useTheme();
   const [open, setOpen] = useState<boolean>(false);
   const [openList, setOpenList] = useState<ActiveMenuProps>(ActiveMenu);
@@ -293,4 +293,4 @@ const Layout: FC = () => {
   );
 };
 
-export default Layout;
+export default AdminLayout;

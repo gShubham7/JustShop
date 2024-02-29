@@ -10,13 +10,22 @@ import Login from "../pages/Login";
 import Orders from "../pages/Orders";
 import ProductList from "../pages/ProductList";
 import ViewOrder from "../pages/ViewOrder";
-import Layout from "../components/Layout";
+import AdminLayout from "../components/AdminLayout";
+import UserLayout from "../components/UserLayout";
+import Register from "../pages/Register";
+import Home from "../pages/Home";
+import AllProducts from "../pages/AllProducts";
 
 const AllRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/admin" element={<Layout />}>
+      <Route path="/" element={<UserLayout />}>
+        <Route index element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/products" element={<AllProducts />} />
+      </Route>
+      <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="orders" element={<Orders />} />
         <Route path="orders/:id" element={<ViewOrder />} />
