@@ -29,19 +29,19 @@ const cloudinaryUploadImage = async (filesToUpload) => {
   });
 };
 
-const cloudinaryRemoveImage = async (filesToRemove) => {
-  return new Promise((resolve) => {
-    cloudinary.uploader.destroy(filesToRemove, (result) => {
-      resolve(
-        {
+const cloudinaryRemoveImage = async (id) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(id, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve({
           url: result.secure_url,
           asset_id: result.asset_id,
           public_id: result.public_id,
-        },
-        {
           resource_type: "auto",
-        }
-      );
+        });
+      }
     });
   });
 };

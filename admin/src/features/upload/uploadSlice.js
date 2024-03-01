@@ -9,12 +9,13 @@ export const uploadImg = createAsyncThunk(
       for (let i = 0; i < data.length; i++) {
         formData.append("images", data[i]);
       }
-      return await uploadService.uploadImg(data);
+      return await uploadService.uploadImg(formData);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
+
 export const delImg = createAsyncThunk(
   "delete/images",
   async (id, thunkAPI) => {
@@ -25,6 +26,7 @@ export const delImg = createAsyncThunk(
     }
   }
 );
+
 const initialState = {
   images: [],
   isError: false,
@@ -32,6 +34,7 @@ const initialState = {
   isSuccess: false,
   message: "",
 };
+
 export const uploadSlice = createSlice({
   name: "images",
   initialState,
@@ -70,4 +73,5 @@ export const uploadSlice = createSlice({
       });
   },
 });
+
 export default uploadSlice.reducer;

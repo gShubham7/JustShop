@@ -11,6 +11,7 @@ export const getBrands = createAsyncThunk(
     }
   }
 );
+
 export const getABrand = createAsyncThunk(
   "brand/get-brand",
   async (id, thunkAPI) => {
@@ -21,6 +22,7 @@ export const getABrand = createAsyncThunk(
     }
   }
 );
+
 export const createBrand = createAsyncThunk(
   "brand/create-brand",
   async (brandData, thunkAPI) => {
@@ -31,6 +33,7 @@ export const createBrand = createAsyncThunk(
     }
   }
 );
+
 export const updateABrand = createAsyncThunk(
   "brand/update-brand",
   async (brand, thunkAPI) => {

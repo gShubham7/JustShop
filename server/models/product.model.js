@@ -23,7 +23,7 @@ const productSchema = new Schema(
     },
     category: {
       type: String,
-      required: true,
+      // required: true,
     },
     brand: {
       type: String,
@@ -38,10 +38,6 @@ const productSchema = new Schema(
       default: 0,
     },
     images: [],
-    color: {
-      type: String,
-      required: true,
-    },
     tags: String,
     ratings: [
       {

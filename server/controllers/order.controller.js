@@ -41,10 +41,10 @@ const createOrder = asyncHandler(async (req, res) => {
 });
 
 const getOrders = asyncHandler(async (req, res) => {
-  const { _id } = req.user;
-  validateMongodbId(_id);
+  const { id } = req.params;
+  validateMongodbId(id);
   try {
-    const userOrders = await Order.findOne({ orderBy: _id })
+    const userOrders = await Order.findOne({ orderBy: id })
       .populate("products.product")
       .populate("orderBy")
       .exec();

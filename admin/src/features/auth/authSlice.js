@@ -17,7 +17,6 @@ const initialState = {
 export const login = createAsyncThunk(
   "auth/login",
   async (userData, thunkAPI) => {
-    console.log(userData);
     try {
       return await authService.login(userData);
     } catch (error) {
@@ -36,6 +35,7 @@ export const getOrders = createAsyncThunk(
     }
   }
 );
+
 export const getOrderByUser = createAsyncThunk(
   "order/get-order",
   async (id, thunkAPI) => {

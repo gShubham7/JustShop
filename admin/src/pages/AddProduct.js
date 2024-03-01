@@ -17,7 +17,7 @@ let schema = yup.object().shape({
   description: yup.string().required("Description is Required"),
   price: yup.number().required("Price is Required"),
   brand: yup.string().required("Brand is Required"),
-  category: yup.string().required("Category is Required"),
+  // category: yup.string().required("Category is Required"),
   tags: yup.string().required("Tag is Required"),
   quantity: yup.number().required("Quantity is Required"),
 });

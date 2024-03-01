@@ -10,8 +10,8 @@ import {
 const orderRouter = Router();
 
 orderRouter.post("/", authMiddleware, createOrder);
-orderRouter.get("/get-orders", authMiddleware, getOrders);
 orderRouter.get("/get-all-orders", authMiddleware, isAdmin, getAllOrders);
+orderRouter.get("/get-orders/:id", authMiddleware, getOrders);
 orderRouter.put(
   "/update-order/:id",
   authMiddleware,

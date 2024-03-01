@@ -20,12 +20,8 @@ const columns = [
     dataIndex: "brand",
   },
   {
-    title: "Count",
-    dataIndex: "count",
-  },
-  {
-    title: "Color",
-    dataIndex: "color",
+    title: "Quantity",
+    dataIndex: "quantity",
   },
   {
     title: "Amount",
@@ -46,22 +42,21 @@ const ViewOrder = () => {
   const location = useLocation();
   const userId = location.pathname.split("/")[3];
   const dispatch = useDispatch();
-  const orderState = useSelector((state) => state.auth.orderbyuser[0].products);
-
+  const orderState = useSelector((state) => state.auth.orderByUser.products);
+  console.log(orderState);
   useEffect(() => {
     dispatch(getOrderByUser(userId));
-  }, []);
+  }, [dispatch]);
 
   const data1 = [];
-  
+
   for (let i = 0; i < orderState.length; i++) {
     data1.push({
       key: i + 1,
       name: orderState[i].product.title,
       brand: orderState[i].product.brand,
-      count: orderState[i].count,
+      quantity: orderState[i].product.quantity,
       amount: orderState[i].product.price,
-      color: orderState[i].product.color,
       date: orderState[i].product.createdAt,
       action: (
         <>
@@ -75,6 +70,7 @@ const ViewOrder = () => {
       ),
     });
   }
+
   return (
     <div>
       <h3 className="mb-4 title">View Order</h3>
