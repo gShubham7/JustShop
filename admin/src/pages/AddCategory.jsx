@@ -11,7 +11,8 @@ import {
   resetState,
   updateAProductCategory,
 } from "../features/pcategory/pcategorySlice";
-let schema = yup.object().shape({
+
+const schema = yup.object().shape({
   title: yup.string().required("Category Name is Required"),
 });
 
@@ -21,14 +22,8 @@ const AddCategory = () => {
   const getPCatId = location.pathname.split("/")[3];
   const navigate = useNavigate();
   const newCategory = useSelector((state) => state.pCategory);
-  const {
-    isSuccess,
-    isError,
-    isLoading,
-    createdCategory,
-    categoryName,
-    updatedCategory,
-  } = newCategory;
+  const { isSuccess, isError, createdCategory, categoryName, updatedCategory } =
+    newCategory;
 
   useEffect(() => {
     if (getPCatId !== undefined) {
@@ -36,7 +31,7 @@ const AddCategory = () => {
     } else {
       dispatch(resetState());
     }
-  }, [getPCatId]);
+  }, [dispatch, getPCatId]);
 
   useEffect(() => {
     if (isSuccess && createdCategory) {
@@ -49,7 +44,7 @@ const AddCategory = () => {
     if (isError) {
       toast.error("Something Went Wrong!");
     }
-  }, [isSuccess, isError, isLoading]);
+  }, [createdCategory, isError, isSuccess, navigate, updatedCategory]);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -71,7 +66,7 @@ const AddCategory = () => {
       }
     },
   });
-  
+
   return (
     <div>
       <h3 className="mb-4  title">

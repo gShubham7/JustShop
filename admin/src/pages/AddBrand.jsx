@@ -12,7 +12,7 @@ import {
   updateABrand,
 } from "../features/brand/brandSlice";
 
-let schema = yup.object().shape({
+const schema = yup.object().shape({
   title: yup.string().required("Brand Name is Required"),
 });
 
@@ -22,14 +22,8 @@ const AddBrand = () => {
   const navigate = useNavigate();
   const getBrandId = location.pathname.split("/")[3];
   const newBrand = useSelector((state) => state.brand);
-  const {
-    isSuccess,
-    isError,
-    isLoading,
-    createdBrand,
-    brandName,
-    updatedBrand,
-  } = newBrand;
+  const { isSuccess, isError, createdBrand, brandName, updatedBrand } =
+    newBrand;
 
   useEffect(() => {
     if (getBrandId !== undefined) {
@@ -37,22 +31,21 @@ const AddBrand = () => {
     } else {
       dispatch(resetState());
     }
-  }, [getBrandId]);
+  }, [dispatch, getBrandId]);
 
   useEffect(() => {
     if (isSuccess && createdBrand) {
-      toast.success("Brand Added Successfullly!");
+      toast.success("Brand Added Successfully!");
     }
     if (isSuccess && updatedBrand) {
-      toast.success("Brand Updated Successfullly!");
+      toast.success("Brand Updated Successfully!");
       navigate("/admin/list-brand");
     }
-
     if (isError) {
       toast.error("Something Went Wrong!");
     }
-  }, [isSuccess, isError, isLoading]);
-  
+  }, [createdBrand, isError, isSuccess, navigate, updatedBrand]);
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {

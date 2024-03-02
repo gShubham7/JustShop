@@ -3,12 +3,15 @@ import { Table } from "antd";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../features/product/productSlice";
-import { Link } from "react-router-dom";
+import {
+  deleteAProduct,
+  getProducts,
+  resetState,
+} from "../features/product/productSlice";
 
 const columns = [
   {
-    title: "SNo",
+    title: "Sr.No",
     dataIndex: "key",
   },
   {
@@ -27,10 +30,6 @@ const columns = [
     sorter: (a, b) => a.category.length - b.category.length,
   },
   {
-    title: "Color",
-    dataIndex: "color",
-  },
-  {
     title: "Price",
     dataIndex: "price",
     sorter: (a, b) => a.price - b.price,
@@ -42,13 +41,13 @@ const columns = [
 ];
 
 const ProductList = () => {
-
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
   const productState = useSelector((state) => state.product.products);
 
   useEffect(() => {
+    dispatch(resetState());
     dispatch(getProducts());
-  }, []);
+  }, [dispatch]);
 
   const data1 = [];
 
@@ -58,21 +57,19 @@ const ProductList = () => {
       title: productState[i].title,
       brand: productState[i].brand,
       category: productState[i].category,
-      color: productState[i].color,
       price: `${productState[i].price}`,
       action: (
         <>
-          <Link to="/" className=" fs-3 text-danger">
-            <BiEdit />
-          </Link>
-          <Link className="ms-3 fs-3 text-danger" to="/">
-            <AiFillDelete />
-          </Link>
+          <BiEdit className=" fs-3 text-danger" />
+          <AiFillDelete
+            className="ms-3 fs-3 text-danger"
+            onClick={() => dispatch(deleteAProduct(productState[i]._id))}
+          />
         </>
       ),
     });
   }
-  console.log(data1);
+
   return (
     <div>
       <h3 className="mb-4 title">Products</h3>

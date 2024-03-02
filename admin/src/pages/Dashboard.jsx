@@ -5,7 +5,7 @@ import { Table } from "antd";
 
 const columns = [
   {
-    title: "SNo",
+    title: "Sr.No",
     dataIndex: "key",
   },
   {
@@ -18,7 +18,7 @@ const columns = [
   },
   {
     title: "Status",
-    dataIndex: "staus",
+    dataIndex: "status",
   },
 ];
 
@@ -29,7 +29,7 @@ for (let i = 0; i < 46; i++) {
     key: i,
     name: `Edward King ${i}`,
     product: 32,
-    staus: `London, Park Lane no. ${i}`,
+    status: `London, Park Lane no. ${i}`,
   });
 }
 

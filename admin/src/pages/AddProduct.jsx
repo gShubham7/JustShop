@@ -12,12 +12,12 @@ import Dropzone from "react-dropzone";
 import { delImg, uploadImg } from "../features/upload/uploadSlice";
 import { createProducts, resetState } from "../features/product/productSlice";
 
-let schema = yup.object().shape({
+const schema = yup.object().shape({
   title: yup.string().required("Title is Required"),
   description: yup.string().required("Description is Required"),
   price: yup.number().required("Price is Required"),
   brand: yup.string().required("Brand is Required"),
-  // category: yup.string().required("Category is Required"),
+  category: yup.string().required("Category is Required"),
   tags: yup.string().required("Tag is Required"),
   quantity: yup.number().required("Quantity is Required"),
 });
@@ -28,7 +28,7 @@ const AddProduct = () => {
   useEffect(() => {
     dispatch(getBrands());
     dispatch(getCategories());
-  }, []);
+  }, [dispatch]);
 
   const brandState = useSelector((state) => state.brand.brands);
   const catState = useSelector((state) => state.pCategory.pCategories);
@@ -43,19 +43,7 @@ const AddProduct = () => {
     if (isError) {
       toast.error("Something Went Wrong!");
     }
-  }, [isSuccess, isError, isLoading]);
-
-  const img = [];
-  imgState.forEach((i) => {
-    img.push({
-      public_id: i.public_id,
-      url: i.url,
-    });
-  });
-
-  useEffect(() => {
-    formik.values.images = img;
-  }, [img]);
+  }, [isSuccess, isError, isLoading, createdProduct]);
 
   const formik = useFormik({
     initialValues: {
@@ -78,6 +66,17 @@ const AddProduct = () => {
       }, 3000);
     },
   });
+
+  useEffect(() => {
+    const img = [];
+    imgState.forEach((i) => {
+      img.push({
+        public_id: i.public_id,
+        url: i.url,
+      });
+    });
+    formik.values.images = img;
+  }, [formik.values, imgState]);
 
   return (
     <div>

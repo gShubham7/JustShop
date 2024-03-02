@@ -8,7 +8,7 @@ import { getOrderByUser } from "../features/auth/authSlice";
 
 const columns = [
   {
-    title: "SNo",
+    title: "Sr.No",
     dataIndex: "key",
   },
   {
@@ -43,10 +43,10 @@ const ViewOrder = () => {
   const userId = location.pathname.split("/")[3];
   const dispatch = useDispatch();
   const orderState = useSelector((state) => state.auth.orderByUser.products);
-  console.log(orderState);
+
   useEffect(() => {
     dispatch(getOrderByUser(userId));
-  }, [dispatch]);
+  }, [dispatch, userId]);
 
   const data1 = [];
 

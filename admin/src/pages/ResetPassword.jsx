@@ -17,7 +17,7 @@ const ResetPassword = () => {
           <CustomInput
             type="password"
             label="Confirm Password"
-            id="confirmpass"
+            id="confirmPass"
           />
 
           <button

@@ -65,6 +65,7 @@ const initialState = {
   isSuccess: false,
   message: "",
 };
+
 export const brandSlice = createSlice({
   name: "brands",
   initialState,
@@ -138,7 +139,9 @@ export const brandSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.deletedBrand = action.payload;
+        state.brands = state.brands.filter(
+          (brand) => brand._id !== action.payload
+        );
       })
       .addCase(deleteABrand.rejected, (state, action) => {
         state.isLoading = false;

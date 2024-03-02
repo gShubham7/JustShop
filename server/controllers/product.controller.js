@@ -9,7 +9,6 @@ import {
 import fs from "fs";
 
 const createProduct = asyncHandler(async (req, res) => {
-  console.log(req.body);
   try {
     if (req.body.title) {
       req.body.slug = slugify(req.body.title);
@@ -182,7 +181,7 @@ const removeImages = asyncHandler(async (req, res) => {
   const { id } = req.params;
   console.log(id);
   try {
-    const deleted = cloudinaryRemoveImage(id, "images");
+    cloudinaryRemoveImage(id, "images");
     res.json({ message: "Deleted" });
   } catch (error) {
     throw new Error(error);

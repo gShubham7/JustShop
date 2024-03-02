@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { getOrders } from "../features/auth/authSlice";
+import { getAllOrders } from "../features/auth/authSlice";
 
 const columns = [
   {
-    title: "SNo",
+    title: "Sr.No",
     dataIndex: "key",
   },
   {
@@ -39,11 +39,11 @@ const Orders = () => {
   const orderState = useSelector((state) => state.auth.orders);
 
   useEffect(() => {
-    dispatch(getOrders());
-  }, []);
+    dispatch(getAllOrders());
+  }, [dispatch]);
 
   const data1 = [];
-  
+
   for (let i = 0; i < orderState.length; i++) {
     data1.push({
       key: i + 1,

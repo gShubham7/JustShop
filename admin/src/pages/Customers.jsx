@@ -5,7 +5,7 @@ import { getUsers } from "../features/cutomers/customerSlice";
 
 const columns = [
   {
-    title: "SNo",
+    title: "Sr.No",
     dataIndex: "key",
   },
   {
@@ -28,18 +28,18 @@ const Customers = () => {
 
   useEffect(() => {
     dispatch(getUsers());
-  }, []);
+  }, [dispatch]);
 
-  const customerstate = useSelector((state) => state.customer.customers);
+  const customerState = useSelector((state) => state.customer.customers);
   const data1 = [];
   
-  for (let i = 0; i < customerstate.length; i++) {
-    if (customerstate[i].role !== "admin") {
+  for (let i = 0; i < customerState.length; i++) {
+    if (customerState[i].role !== "admin") {
       data1.push({
         key: i + 1,
-        name: customerstate[i].firstname + " " + customerstate[i].lastname,
-        email: customerstate[i].email,
-        mobile: customerstate[i].mobile,
+        name: customerState[i].firstname + " " + customerState[i].lastname,
+        email: customerState[i].email,
+        mobile: customerState[i].mobile,
       });
     }
   }
